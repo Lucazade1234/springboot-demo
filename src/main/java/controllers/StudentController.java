@@ -6,9 +6,8 @@ import com.example.demo.DemoApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 import services.StudentService;
 
 import java.time.LocalDate;
@@ -26,5 +25,29 @@ public class StudentController {
     @GetMapping
     public List<Student> getStudents(){
         return studentService.getStudents();
+    }
+
+    @PostMapping
+    public void registerStudent(@RequestBody Student student){
+        studentService.registerStudent(student);
+    }
+
+    @DeleteMapping(path = "{studentId}")
+    public void deleteStudent(@PathVariable("studentId")Long studentId){
+        studentService.deleteStudent(studentId);
+    }
+
+    @PutMapping(path = "updateName/{studentId}/{name}")
+    public void updateStudentName(@PathVariable("studentId") Long studentId,
+                                  @PathVariable("name") String name){
+        studentService.updateStudentName(studentId, name);
+    }
+
+    @Transactional
+    @PutMapping(path = "updatestudent/{studentId}/{name}/{email}")
+    public void updateStudent(@PathVariable("studentId") Long studentId,
+                              @PathVariable("name") String name,
+                              @PathVariable("email") String email){
+        studentService.updateStudent(studentId, name, email);
     }
 }
